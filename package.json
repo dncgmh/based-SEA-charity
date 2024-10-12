@@ -1,0 +1,25 @@
+{
+  "name": "based-sea-charity",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "dev:web": "cd web && bun run dev",
+    "dev:server": "cd server && bun run dev",
+    "check": "biome check --write .",
+    "ci:check": "biome ci --formatter-enabled=false --linter-enabled=false",
+    "ci:format": "biome ci --linter-enabled=false --organize-imports-enabled=false",
+    "ci:lint": "biome ci --formatter-enabled=false --organize-imports-enabled=false",
+    "format": "biome format --write .",
+    "lint": "biome lint --write .",
+    "lint:unsafe": "biome lint --write --unsafe ."
+  },
+  "workspaces": ["server", "web"],
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "@biomejs/biome": "^1.8.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": { "cloudinary": "^2.5.1" }
+}
