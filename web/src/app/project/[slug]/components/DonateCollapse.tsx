@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useEffect, type FormEvent } from 'react';
 import { type Hex, parseEther } from 'viem';
 import { type BaseError, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
-import contract from '../../../../../../smart-contract/artifacts/contracts/ChairtyProjectDonation.sol/CharityProjectDonation.json';
+import contractJson from '@/contract-abis/CharityProjectDonation.json';
 import { useAtom } from 'jotai';
 import transactionRefreshAtom from '@/stores/transaction-refresh';
 
@@ -23,7 +23,7 @@ export default function DonateCollapse({ project }) {
     const message = formData.get('message') as string;
 
     writeContract({
-      abi: contract.abi as any,
+      abi: contractJson.abi as any,
       address: to,
       functionName: 'donate',
       args: [message],

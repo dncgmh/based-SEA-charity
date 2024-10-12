@@ -42,6 +42,9 @@ projectRouter.get('/', async ({ query: { pageSize, pageNumber, charityId, status
 
 projectRouter.get('/featured', async () => {
   const featuredProjects = await projectService.getFeaturedProjects();
+  if(featuredProjects.length < 6) {
+
+  }
   const projects = await projectModel.find({ _id: { $in: featuredProjects.map((project) => project._id) } }).populate('charity', 'name logo');
   await Promise.all(
     projects.map(async (project) => {

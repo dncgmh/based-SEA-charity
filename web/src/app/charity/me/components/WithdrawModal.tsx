@@ -4,7 +4,7 @@ import { CircleCheck, CircleX, Info } from 'lucide-react';
 import Link from 'next/link';
 import { parseEther } from 'viem';
 import { type BaseError, useAccount, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
-import contract from '../../../../../../smart-contract/artifacts/contracts/ChairtyProjectDonation.sol/CharityProjectDonation.json';
+import contractJson from '@/contract-abis/CharityProjectDonation.json';
 
 export default function WithdrawModal({ project }) {
   const { address } = useAccount();
@@ -39,7 +39,7 @@ export default function WithdrawModal({ project }) {
 
     try {
       writeContract({
-        abi: contract.abi as any,
+        abi: contractJson.abi as any,
         address: project.contractAddress,
         functionName: 'withdrawFunds',
         args: [parseEther(formData.value), formData.message],

@@ -59,7 +59,7 @@ app.group('/api', (app) => {
   return app;
 });
 
-app.listen(4000);
+app.listen(config.app.port || 4000);
 
 await connectDB();
 subscribe();

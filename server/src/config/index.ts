@@ -1,6 +1,5 @@
 export const config = {
   app: {
-    baseUrl: process.env.BASE_URL,
     port: process.env.PORT,
   },
   db: {
