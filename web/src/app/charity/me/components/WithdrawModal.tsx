@@ -93,6 +93,7 @@ export default function WithdrawModal({ project }) {
               <span className="label-text">Message</span>
             </label>
             <textarea
+              rows={3}
               id="message"
               name="message"
               value={formData.message}

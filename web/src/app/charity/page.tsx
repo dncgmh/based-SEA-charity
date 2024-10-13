@@ -9,7 +9,7 @@ const CharityCard = ({ charity }) => (
   <div className="card bg-base-100 shadow-xl">
     <figure className="px-4 pt-4 pb-2">
       <div className="avatar">
-        <div className="w-16 rounded-full ring ring-info ring-offset-2 ring-offset-base-100">
+        <div className="w-16 rounded-full ring ring-sky ring-offset-2 ring-offset-base-100">
           <Image src={charity.logo} alt={charity.name} width={64} height={64} />
         </div>
       </div>

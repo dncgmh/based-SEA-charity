@@ -1,6 +1,10 @@
 export const config = {
   app: {
     port: process.env.PORT,
+    display: {
+      featuredCharities: 6,
+      featureProjects: 6,
+    },
   },
   db: {
     mongoUri: process.env.MONGO_URI,

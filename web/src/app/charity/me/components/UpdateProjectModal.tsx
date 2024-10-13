@@ -1,4 +1,5 @@
 import { api } from '@/lib/api';
+import { formatDate } from '@/lib/common';
 import { useCallback, useState, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { toast } from 'sonner';
@@ -11,10 +12,11 @@ export default function UpdateProjectModal({ project, onUpdate }) {
     link: project?.link,
     tags: project?.tags || [],
     targetAmount: project?.targetAmount,
-    startDate: project?.startDate,
-    endDate: project?.endDate,
+    startDate: formatDate(project?.startDate),
+    endDate: formatDate(project?.endDate),
   });
   const [tagInput, setTagInput] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (project) {
@@ -25,8 +27,8 @@ export default function UpdateProjectModal({ project, onUpdate }) {
         link: project.link,
         tags: project.tags,
         targetAmount: project.targetAmount,
-        startDate: project.startDate,
-        endDate: project.endDate,
+        startDate: formatDate(project.startDate),
+        endDate: formatDate(project.endDate),
       });
     }
   }, [project]);
@@ -68,6 +70,7 @@ export default function UpdateProjectModal({ project, onUpdate }) {
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
+      setIsLoading(true);
       const formDataToSend = new FormData();
 
       for (const key in formData) {
@@ -98,9 +101,11 @@ export default function UpdateProjectModal({ project, onUpdate }) {
       const { data: updatedProject } = await api.project.update(project._id, formDataToSend);
       toast.success('Project updated successfully');
       onUpdate(updatedProject);
-      onClose();
     } catch (error) {
       toast.error('Failed to update project', { description: error.message });
+    } finally {
+      setIsLoading(false);
+      onClose();
     }
   };
 
@@ -136,7 +141,7 @@ export default function UpdateProjectModal({ project, onUpdate }) {
             <label className='label' htmlFor='description'>
               <span className='label-text'>Project Description</span>
             </label>
-            <textarea id='description' name='description' value={formData.description} onChange={handleChange} className='textarea textarea-bordered w-full' />
+            <textarea rows={5} id='description' name='description' value={formData.description} onChange={handleChange} className='textarea textarea-bordered w-full' />
           </div>
           <div className='form-control'>
             <label className='label'>
@@ -211,10 +216,11 @@ export default function UpdateProjectModal({ project, onUpdate }) {
             </div>
           </div>
           <div className='modal-action'>
-            <button type='submit' className='btn btn-info'>
-              Update Project
+            <button type='submit' className={'btn btn-info'} disabled={isLoading}>
+              <span className={isLoading ? 'loading loading-spinner' : ''} />
+              Update
             </button>
-            <button type='button' className='btn' onClick={onClose}>
+            <button type='button' className='btn' onClick={onClose} disabled={isLoading}>
               Cancel
             </button>
           </div>

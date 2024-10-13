@@ -52,7 +52,7 @@ export default function ProjectDetailPage({ params }) {
   const currentAmount = totalFundsRaisedValue;
   const goal = project.targetAmount;
   const progressPercentage = (currentAmount / goal) * 100;
-  const formattedProgressPercentage = progressPercentage.toFixed(1);
+  const formattedProgressPercentage = progressPercentage.toFixed(2);
   const remainingDays = Math.max(0, Math.ceil((new Date(project.endDate).getTime() - new Date().getTime()) / (1000 * 3600 * 24)));
 
   return (
@@ -72,7 +72,7 @@ export default function ProjectDetailPage({ params }) {
             <div className='card-body'>
               <div className='mb-4 flex items-center'>
                 <div className='avatar mr-4'>
-                  <div className='w-16 rounded-full ring ring-info ring-offset-2 ring-offset-base-100'>
+                  <div className='w-16 rounded-full ring ring-sky ring-offset-2 ring-offset-base-100'>
                     <Image alt={charity.name} src={charity.logo} width={64} height={64} />
                   </div>
                 </div>
@@ -117,18 +117,12 @@ export default function ProjectDetailPage({ params }) {
               </div>
             ))}
           </div>
-          <button className='-translate-y-1/2 btn btn-circle btn-sm absolute top-1/2 left-2'>
-            <ChevronLeft />
-          </button>
-          <button className='-translate-y-1/2 btn btn-circle btn-sm absolute top-1/2 right-2'>
-            <ChevronRight />
-          </button>
         </div>
       </div>
 
       <div className='mt-8'>
         <h2 className='mb-4 font-semibold text-2xl'>About This Project</h2>
-        <p className='text-lg leading-relaxed'>{project.description}</p>
+        <p className='whitespace-pre-line text-md'>{project.description}</p>
       </div>
 
       <div className='mt-6 flex flex-wrap gap-2'>

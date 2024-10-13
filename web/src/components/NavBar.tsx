@@ -9,19 +9,19 @@ import { useAccount } from 'wagmi';
 export default function NavBar() {
   const { address } = useAccount();
   return (
-    <div className="navbar bg-base-100 p-0">
-      <div className="flex-1">
-        <Image src="/based-sea-charity.svg" width={40} height={40} alt="based sea charity" />
-        <Link href={'/'} className="btn btn-ghost p-1 text-xl">
-          Based SEA Charity
+    <div className='navbar bg-base-100 p-0'>
+      <div className='flex-1'>
+        <Link href={'/'} className='btn btn-ghost p-1 text-xl'>
+          <Image src='/based-sea-charity.svg' width={40} height={40} alt='based sea charity' />
+          <span className='hidden md:block'>Based SEA Charity</span>
         </Link>
       </div>
-      <div className="flex-none">
-        <ul className="menu menu-horizontal">
-          <li className="my-auto">
+      <div className='flex-none'>
+        <ul className='menu menu-horizontal'>
+          <li className='my-auto'>
             <Link href={'/charity'}>Charity</Link>
           </li>
-          <li className="my-auto ml-2">
+          <li className='my-auto ml-2'>
             <Link href={'/project'}>Project</Link>
           </li>
         </ul>

@@ -16,6 +16,9 @@ export default function CharityOwnerPage() {
   useEffect(() => {
     const charityId = auth.charityId;
     (async () => {
+      if (!charityId) {
+        return;
+      }
       const result = await api.charity.getById(charityId);
       setCharity(result.data);
     })();
@@ -27,12 +30,7 @@ export default function CharityOwnerPage() {
   };
 
   const handleUpdateCharity = async (updatedData) => {
-    try {
-      const { data: updatedCharity } = await api.charity.update(charity.id, updatedData);
-      setCharity(updatedCharity);
-    } catch (error) {
-      console.error('Failed to update charity:', error);
-    }
+    setCharity(updatedData);
   };
 
   if (!charity) {
@@ -55,40 +53,34 @@ export default function CharityOwnerPage() {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <div className="card mb-8 bg-base-100 shadow-xl">
-        <div className="card-body">
-          <div className="mb-4 flex items-center justify-between">
-            <h2 className="card-title text-3xl">{charity.name}</h2>
-            <button className="btn btn-info" onClick={() => showModal('update-charity')}>
-              <Edit className="mr-2 h-4 w-4" /> Edit Charity Details
+    <div className='container mx-auto p-4'>
+      <div className='card mb-8 bg-base-100 shadow-xl'>
+        <div className='card-body'>
+          <div className='mb-4 flex items-center justify-between'>
+            <h2 className='card-title text-3xl'>{charity.name}</h2>
+            <button className='btn btn-info' onClick={() => showModal('update-charity')}>
+              <Edit className='mr-2 h-4 w-4' /> Edit Charity Details
             </button>
           </div>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+          <div className='grid grid-cols-1 gap-4 md:grid-cols-4'>
             <div>
               <figure>
-                <Image src={charity.logo} alt={charity.name} width={200} height={200} className="w-full rounded-xl" />
+                <Image src={charity.logo} alt={charity.name} width={200} height={200} className='w-full rounded-xl' />
               </figure>
             </div>
-            <div className="md:col-span-3">
-              <p className="mb-2" style={{ whiteSpace: 'pre-line' }}>
+            <div className='md:col-span-3'>
+              <p className='mb-2' style={{ whiteSpace: 'pre-line' }}>
                 {charity.description}
               </p>
-              <p className="mb-2">
+              <p className='mb-2'>
                 <strong>Address:</strong> {charity.address}
               </p>
-              <p className="mb-2">
+              <p className='mb-2'>
                 <strong>Phone Number:</strong> {charity.phoneNumber}
               </p>
-              <div className="mt-4 flex flex-wrap gap-2">
+              <div className='mt-4 flex flex-wrap gap-2'>
                 {charity.links.map((link, index) => (
-                  <a
-                    key={index}
-                    href={link.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn btn-circle btn-outline"
-                  >
+                  <a key={index} href={link.url} target='_blank' rel='noopener noreferrer' className='btn btn-circle btn-outline'>
                     {getLinkIcon(link.type)}
                   </a>
                 ))}

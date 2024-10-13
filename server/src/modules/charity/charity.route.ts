@@ -6,6 +6,8 @@ import slug from 'slug';
 import { uploadImage } from '../../utils/cloudinary';
 import { transactionService } from '../transaction/transaction.service';
 import { charityService } from './charity.service';
+import { authPlugin } from '../../plugins/auth';
+import { config } from '../../config';
 
 export const charityRouter = new Elysia({ prefix: '/charity' });
 
@@ -43,8 +45,16 @@ charityRouter.get('/:id', async ({ params: { id } }) => {
 });
 
 charityRouter.get('/featured', async () => {
-  const featuredProjects = await charityService.getFeaturedCharities();
-  const charities = await charityModel.find({ _id: { $in: featuredProjects.map((charity) => charity._id) } });
+  const featuredCharities = await charityService.getFeaturedCharities();
+  const isLessThanDisplayLimit = featuredCharities.length < config.app.display.featuredCharities;
+  const charities = await charityModel.find({ _id: { $in: featuredCharities.map((charity) => charity._id) } });
+  if (isLessThanDisplayLimit) {
+    const remainingCharities = await charityModel
+      .find({ _id: { $nin: featuredCharities.map((charity) => charity._id) } })
+      .sort('-createdAt')
+      .limit(config.app.display.featuredCharities - featuredCharities.length);
+    charities.push(...remainingCharities);
+  }
   await Promise.all(
     charities.map(async (charity) => {
       const statsData = await transactionService.getStats({ charityId: charity.id });
@@ -153,7 +163,42 @@ charityRouter.post(
   },
 );
 
-charityRouter.put('/:id', async ({ params: { id }, body }) => {
-  const charity = await charityModel.findByIdAndUpdate(id, body, { new: true });
-  return charity;
-});
+charityRouter.use(authPlugin).put(
+  '/:id',
+  async ({ params: { id }, body, payload: charity }) => {
+    if (id !== charity._id) {
+      throw new Error('Unauthorized');
+    }
+    const updateData: Record<string, any> = { ...body };
+    if (body.logo) {
+      const logoData = await uploadImage(await body.logo.arrayBuffer());
+      updateData.logo = logoData.url;
+    }
+    const updatedCharity = await charityModel.findByIdAndUpdate(id, updateData, { new: true });
+    return { data: updatedCharity };
+  },
+  {
+    body: t.Object({
+      name: t.Optional(t.String()),
+      description: t.Optional(t.String()),
+      address: t.Optional(t.String()),
+      phoneNumber: t.Optional(t.String()),
+      email: t.Optional(t.String()),
+      links: t.Optional(
+        t.Array(
+          t.Object({
+            type: t.String(),
+            url: t.String(),
+          }),
+        ),
+      ),
+      type: t.Optional(t.Enum({ individual: 'individual', organization: 'organization', government: 'government' })),
+      logo: t.Optional(t.File()),
+    }),
+    transform({ body }) {
+      if (typeof body.links === 'string') {
+        body.links = JSON.parse(body.links);
+      }
+    },
+  },
+);

@@ -8,9 +8,10 @@ export default function ProjectTableStats({ project }) {
   const { data: balanceResult } = useBalance({
     address: project?.contractAddress,
   });
-  const totalFundsRaised = project.stats.totalDonated * setting.etherPrice;
+  const totalFundsRaised = (project?.stats?.totalDonated || 0) * setting.etherPrice;
 
   const balance = balanceResult?.value ? Number.parseFloat(formatEther(balanceResult.value)) : 0;
+  const balanceValue = balance * setting.etherPrice;
 
   return (
     <ul>
@@ -24,7 +25,7 @@ export default function ProjectTableStats({ project }) {
         <span className='font-bold'>Donors:</span> {project?.stats?.donationCount}
       </li>
       <li>
-        <span className='font-bold'>Contract Balance:</span> ${balance.toLocaleString()}
+        <span className='font-bold'>Contract Balance:</span> {formatCurrency(balanceValue)}
       </li>
     </ul>
   );

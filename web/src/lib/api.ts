@@ -35,6 +35,7 @@ const fetcher = async (url: string, options: AxiosRequestConfig = {}) => {
     return response.data;
   } catch (error) {
     console.error(error);
+    return {};
   }
 };
 
@@ -50,6 +51,7 @@ export const api = {
   },
   project: {
     getList: (params) => fetcher('/project', { params }),
+    getOfCharity: (params) => fetcher('/project/charity', { params }),
     getFeatured: () => fetcher('/project/featured'),
     getBySlug: (slug) => fetcher(`/project/slug/${slug}`),
     getById: (id) => fetcher(`/project/${id}`),

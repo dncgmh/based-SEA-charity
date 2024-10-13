@@ -20,13 +20,9 @@ export default function ProjectCard({ project }) {
       <figure className='relative'>
         <Image src={project?.images?.[0]} alt={project.title} width={400} height={300} className='h-56 object-cover' />
         <div className='absolute bottom-2 left-2 flex items-center space-x-2 rounded-lg bg-base-100 bg-opacity-80 p-2'>
-          <div className='avatar'>
-            <div className='h-8 w-8 rounded-full'>
-              <div className='avatar'>
-                <div className='w-24 rounded-full ring ring-info ring-offset-2 ring-offset-base-100'>
-                  <Image src={project.charity.logo} alt={project.charity.name} layout='fill' objectFit='cover' />
-                </div>
-              </div>
+          <div className='avatar w-10'>
+            <div className='w-full rounded-full ring ring-sky ring-offset-1 ring-offset-base-100'>
+              <Image src={project.charity.logo} alt={project.charity.name} width={50} height={50} className='object-cover' />
             </div>
           </div>
           <span className='font-semibold text-sm'>{project.charity.name}</span>

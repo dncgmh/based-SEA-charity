@@ -71,7 +71,7 @@ export default function ProjectsPage() {
 
         {loading && <Loading />}
 
-        {!loading && projects.length === 0 && <p className="mt-8 text-center text-lg">No projects to display.</p>}
+        {!loading && projects.length === 0 && <p className="mt-8 text-center text-lg text-slate-500">No projects to display.</p>}
 
         {totalItems > pageSize && (
           <div className="mt-8 flex justify-center">

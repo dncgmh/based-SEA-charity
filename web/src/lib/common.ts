@@ -38,3 +38,7 @@ export const formatCurrency = (value: number, options: { fractionDigits?: number
 export const getRemainingDate = (date) => {
   return dayjs(date).fromNow();
 };
+
+export const formatDate = date => {
+  return dayjs(date).format('YYYY-MM-DD');
+}

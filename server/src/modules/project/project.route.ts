@@ -8,12 +8,15 @@ import { wagmiConfig } from '../../config/wagmi.config';
 import { readContract } from '@wagmi/core';
 import { transactionService } from '../transaction/transaction.service';
 import { projectService } from './project.service';
+import { config } from '../../config';
 
 export const projectRouter = new Elysia({ prefix: '/project' });
 
 projectRouter.get('/', async ({ query: { pageSize, pageNumber, charityId, status } }) => {
   const skipValue = pageNumber ? (Number(pageNumber) - 1) * Number(pageSize) : 0;
-  const query: any = {};
+  const query: any = {
+    contractAddress: { $exists: true },
+  };
   if (charityId) {
     query.charityId = charityId;
   }
@@ -26,7 +29,7 @@ projectRouter.get('/', async ({ query: { pageSize, pageNumber, charityId, status
       query.endDate = { $lt: new Date() };
     }
   }
-  const projects = await projectModel.find(query).skip(skipValue).limit(Number(pageSize)).populate('charity', 'name logo');
+  const projects = await projectModel.find(query).skip(skipValue).sort('-createdAt').limit(Number(pageSize)).populate('charity', 'name logo');
   const total = await projectModel.countDocuments(query);
   await Promise.all(
     projects.map(async (project) => {
@@ -42,10 +45,25 @@ projectRouter.get('/', async ({ query: { pageSize, pageNumber, charityId, status
 
 projectRouter.get('/featured', async () => {
   const featuredProjects = await projectService.getFeaturedProjects();
-  if(featuredProjects.length < 6) {
-
-  }
+  const isLessThanDisplayLimit = featuredProjects.length < config.app.display.featureProjects;
   const projects = await projectModel.find({ _id: { $in: featuredProjects.map((project) => project._id) } }).populate('charity', 'name logo');
+  if (isLessThanDisplayLimit) {
+    const remainingProjects = await projectModel
+      .find({
+        _id: { $nin: featuredProjects.map((charity) => charity._id) },
+        startDate: {
+          $lte: new Date(),
+        },
+        endDate: {
+          $gte: new Date(),
+        },
+        contractAddress: { $exists: true },
+      })
+      .populate('charity', 'name logo')
+      .sort('-createdAt')
+      .limit(config.app.display.featureProjects - featuredProjects.length);
+    projects.push(...remainingProjects);
+  }
   await Promise.all(
     projects.map(async (project) => {
       const statsData = await transactionService.getStats({ projectId: project.id });
@@ -169,6 +187,20 @@ projectRouter.use(authPlugin).put(
   },
 );
 
-projectRouter.get('/:id/stats', async ({ params: { id } }) => {
-  // const stats = await transactionModel.aggregate([{ $match: { projectId: id } }, { $group: { _id: '$type', total: { $sum: '$amount' } } }]);
+projectRouter.use(authPlugin).get('/charity', async ({ query: { pageSize, pageNumber }, payload: charity }) => {
+  const skipValue = pageNumber ? (Number(pageNumber) - 1) * Number(pageSize) : 0;
+  const query: any = {};
+  query.charityId = charity._id;
+  const projects = await projectModel.find(query).skip(skipValue).sort('-createdAt').limit(Number(pageSize));
+  const total = await projectModel.countDocuments(query);
+  await Promise.all(
+    projects.map(async (project) => {
+      const statsData = await transactionService.getStats({ projectId: project.id });
+      project.stats = statsData;
+    }),
+  );
+  return {
+    data: projects,
+    total,
+  };
 });

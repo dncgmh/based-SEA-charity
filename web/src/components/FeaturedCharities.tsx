@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { api } from 'src/lib/api';
 
 export default async function FeaturedCharities() {
-  const { data: charities } = await api.charity.getFeatured();
+  const { data: charities = [] } = await api.charity.getFeatured();
   if (charities.length < 6) {
     charities.splice(3, 3);
   }
@@ -11,7 +11,7 @@ export default async function FeaturedCharities() {
     <div className='bg-sky-50'>
       <div className='container'>
         <section className='p-8'>
-          <h2 className='mb-6 text-center font-bold text-3xl'>Featured Charities</h2>
+          <h2 className='divider mb-6 text-center font-bold text-3xl'>Featured Charities</h2>
           <div className='flex justify-end py-2'>
             <Link href='/charity'>
               <button className='btn btn-xs btn-info btn-outline'>See More</button>
@@ -22,7 +22,7 @@ export default async function FeaturedCharities() {
               <div key={index} className='card bg-base-200 shadow-xl'>
                 <figure className='px-2 py-4'>
                   <div className='avatar'>
-                    <div className='w-20 rounded-full ring ring-sky-500 ring-offset-2 ring-offset-base-100'>
+                    <div className='w-20 rounded-full ring ring-sky ring-offset-2 ring-offset-base-100'>
                       <Image src={charity.logo} alt={charity.name} width={60} height={60} className='rounded-xl' />
                     </div>
                   </div>

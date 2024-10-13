@@ -35,6 +35,14 @@ async function getStats({ projectId, charityId }: { projectId?: string; charityI
       },
     },
   ]);
+  const statsData = stats[0];
+  if (!statsData) {
+    return {
+      totalDonated: 0,
+      donationCount: 0,
+      totalWithdrawn: 0,
+    };
+  }
   return stats[0];
 }
 

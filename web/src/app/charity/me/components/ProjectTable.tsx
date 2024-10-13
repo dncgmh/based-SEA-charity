@@ -19,9 +19,8 @@ const ProjectsTable = () => {
   const explorerUrl = baseSepolia.blockExplorers.default.url;
 
   useEffect(() => {
-    const charityId = auth.charityId;
     (async () => {
-      const result = await api.project.getList({ charityId: charityId });
+      const result = await api.project.getOfCharity({});
       setProjects(result.data);
     })();
   }, [auth.charityId]);
