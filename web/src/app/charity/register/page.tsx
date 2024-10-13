@@ -130,116 +130,177 @@ export default function CharityRegisterPage() {
   };
 
   return (
-    <div className='flex min-h-screen items-center bg-sky-200'>
-      <div className='container mx-auto'>
-        <div className='grid grid-cols-1 items-center gap-8 lg:grid-cols-2'>
-          <div className='hidden lg:block'>
-            <img src='/charity-image.png' alt='Charity' className='h-auto w-full rounded-lg object-cover' />
+    <div className="flex min-h-screen items-center bg-sky-200">
+      <div className="container mx-auto">
+        <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-2">
+          <div className="hidden lg:block">
+            <img src="/charity-image.png" alt="Charity" className="h-auto w-full rounded-lg object-cover" />
           </div>
 
-          <div className='my-4'>
-            <form onSubmit={handleSign} className='card bg-base-100 shadow-xl'>
-              <div className='card-body'>
-                <h2 className='card-title mb-6 font-bold text-2xl'>Register Your Charity</h2>
+          <div className="my-4">
+            <form onSubmit={handleSign} className="card bg-base-100 shadow-xl">
+              <div className="card-body">
+                <h2 className="card-title mb-6 font-bold text-2xl">Register Your Charity</h2>
 
-                <label className='form-control w-full'>
-                  <div className='label'>
-                    <span className='label-text'>Charity name</span>
-                  </div>
-                  <input type='text' name='name' value={formData.name} onChange={handleInputChange} placeholder='Enter your charity name' className='input input-bordered w-full' required={true} />
-                </label>
-
-                <label className='form-control w-full'>
-                  <div className='label'>
-                    <span className='label-text'>Logo</span>
-                  </div>
-                  <input type='file' onChange={handleFileChange} className='file-input file-input-bordered w-full' accept='image/*' />
-                </label>
-
-                <label className='form-control w-full'>
-                  <div className='label'>
-                    <span className='label-text'>Phone Number</span>
+                <label className="form-control w-full">
+                  <div className="label">
+                    <span className="label-text">Charity name</span>
                   </div>
                   <input
-                    type='text'
-                    name='phoneNumber'
-                    value={formData.phoneNumber}
+                    type="text"
+                    name="name"
+                    value={formData.name}
                     onChange={handleInputChange}
-                    placeholder='Enter your phone number'
-                    className='input input-bordered w-full'
+                    placeholder="Enter your charity name"
+                    className="input input-bordered w-full"
                     required={true}
                   />
                 </label>
 
-                <label className='form-control w-full'>
-                  <div className='label'>
-                    <span className='label-text'>Charity Address</span>
+                <label className="form-control w-full">
+                  <div className="label">
+                    <span className="label-text">Logo</span>
                   </div>
-                  <input type='text' name='address' value={formData.address} onChange={handleInputChange} placeholder='Enter your address' className='input input-bordered w-full' required={true} />
+                  <input
+                    type="file"
+                    onChange={handleFileChange}
+                    className="file-input file-input-bordered w-full"
+                    accept="image/*"
+                  />
                 </label>
 
-                <label className='form-control w-full'>
-                  <div className='label'>
-                    <span className='label-text'>Onchain Address</span>
+                <label className="form-control w-full">
+                  <div className="label">
+                    <span className="label-text">Phone Number</span>
                   </div>
-                  <input disabled={true} type='text' name='onchainAddress' value={formData.onchainAddress} readOnly={true} className='input input-bordered w-full' required={true} />
+                  <input
+                    type="text"
+                    name="phoneNumber"
+                    value={formData.phoneNumber}
+                    onChange={handleInputChange}
+                    placeholder="Enter your phone number"
+                    className="input input-bordered w-full"
+                    required={true}
+                  />
                 </label>
 
-                <label className='form-control w-full'>
-                  <div className='label'>
-                    <span className='label-text'>Description</span>
+                <label className="form-control w-full">
+                  <div className="label">
+                    <span className="label-text">Charity Address</span>
                   </div>
-                  <textarea rows={5} name='description' value={formData.description} onChange={handleInputChange} className='textarea textarea-bordered' placeholder='Enter Description' required={true} />
+                  <input
+                    type="text"
+                    name="address"
+                    value={formData.address}
+                    onChange={handleInputChange}
+                    placeholder="Enter your address"
+                    className="input input-bordered w-full"
+                    required={true}
+                  />
                 </label>
 
-                <label className='form-control w-full'>
-                  <div className='label'>
-                    <span className='label-text'>Charity Email</span>
+                <label className="form-control w-full">
+                  <div className="label">
+                    <span className="label-text">Onchain Address</span>
                   </div>
-                  <input type='email' name='email' value={formData.email} onChange={handleInputChange} placeholder='Enter Email' className='input input-bordered w-full' required={true} />
+                  <input
+                    disabled={true}
+                    type="text"
+                    name="onchainAddress"
+                    value={formData.onchainAddress}
+                    readOnly={true}
+                    className="input input-bordered w-full"
+                    required={true}
+                  />
                 </label>
 
-                <label className='form-control w-full'>
-                  <div className='label'>
-                    <span className='label-text'>Type</span>
+                <label className="form-control w-full">
+                  <div className="label">
+                    <span className="label-text">Description</span>
                   </div>
-                  <select name='type' value={formData.type} onChange={handleInputChange} className='select select-bordered w-full' required={true}>
-                    <option value='' disabled={true}>
+                  <textarea
+                    rows={5}
+                    name="description"
+                    value={formData.description}
+                    onChange={handleInputChange}
+                    className="textarea textarea-bordered"
+                    placeholder="Enter Description"
+                    required={true}
+                  />
+                </label>
+
+                <label className="form-control w-full">
+                  <div className="label">
+                    <span className="label-text">Charity Email</span>
+                  </div>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    placeholder="Enter Email"
+                    className="input input-bordered w-full"
+                    required={true}
+                  />
+                </label>
+
+                <label className="form-control w-full">
+                  <div className="label">
+                    <span className="label-text">Type</span>
+                  </div>
+                  <select
+                    name="type"
+                    value={formData.type}
+                    onChange={handleInputChange}
+                    className="select select-bordered w-full"
+                    required={true}
+                  >
+                    <option value="" disabled={true}>
                       Select your charity type
                     </option>
-                    <option value='individual'>Individual</option>
-                    <option value='organization'>Organization</option>
+                    <option value="individual">Individual</option>
+                    <option value="organization">Organization</option>
                   </select>
                 </label>
 
-                <div className='form-control w-full'>
-                  <div className='label'>
-                    <span className='label-text'>Links</span>
+                <div className="form-control w-full">
+                  <div className="label">
+                    <span className="label-text">Links</span>
                   </div>
                   {formData.links.map((link, index) => (
-                    <div key={index} className='mb-2 flex gap-2'>
-                      <select value={link.type} onChange={(e) => handleLinkChange(index, 'type', e.target.value)} className='select select-bordered w-1/3'>
-                        <option value=''>Select Type</option>
+                    <div key={index} className="mb-2 flex gap-2">
+                      <select
+                        value={link.type}
+                        onChange={(e) => handleLinkChange(index, 'type', e.target.value)}
+                        className="select select-bordered w-1/3"
+                      >
+                        <option value="">Select Type</option>
                         {linkTypes.map((type) => (
                           <option key={type} value={type}>
                             {type}
                           </option>
                         ))}
                       </select>
-                      <input type='url' value={link.url} onChange={(e) => handleLinkChange(index, 'url', e.target.value)} placeholder='URL' className='input input-bordered w-2/3' />
-                      <button type='button' onClick={() => removeLink(index)} className='btn btn-square btn-sm'>
+                      <input
+                        type="url"
+                        value={link.url}
+                        onChange={(e) => handleLinkChange(index, 'url', e.target.value)}
+                        placeholder="URL"
+                        className="input input-bordered w-2/3"
+                      />
+                      <button type="button" onClick={() => removeLink(index)} className="btn btn-square btn-sm">
                         <X size={20} />
                       </button>
                     </div>
                   ))}
-                  <button type='button' onClick={addLink} className='btn btn-outline btn-sm mt-2'>
+                  <button type="button" onClick={addLink} className="btn btn-outline btn-sm mt-2">
                     <PlusCircle size={20} /> Add Link
                   </button>
                 </div>
 
-                <div className='card-actions mt-6 justify-end'>
-                  <button type='submit' className={'btn btn-primary '} disabled={isLoading || !address}>
-                    {isLoading && <span className='loading loading-spinner' />}
+                <div className="card-actions mt-6 justify-end">
+                  <button type="submit" className={'btn btn-primary '} disabled={isLoading || !address}>
+                    {isLoading && <span className="loading loading-spinner" />}
                     Register
                   </button>
                 </div>

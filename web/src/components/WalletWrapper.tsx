@@ -27,7 +27,7 @@ export default function WalletWrapper({ className, text, withWalletAggregator = 
   useEffect(() => {
     if (isConnected && address) {
       api.charity.getList({ onchainAddress: address }).then((res) => {
-        setIsRegisterCharity(res.data.length > 0);
+        setIsRegisterCharity(res.data?.length > 0);
       });
     }
   }, [isConnected, address]);

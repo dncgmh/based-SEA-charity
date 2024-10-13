@@ -16,16 +16,16 @@ export default function ProjectTableStats({ project }) {
   return (
     <ul>
       <li>
-        <span className='font-bold'>Target Amount:</span> {formatCurrency(project.targetAmount)}
+        <span className="font-bold">Target Amount:</span> {formatCurrency(project.targetAmount)}
       </li>
       <li>
-        <span className='font-bold'>Raised:</span> {formatCurrency(totalFundsRaised)}
+        <span className="font-bold">Raised:</span> {formatCurrency(totalFundsRaised)}
       </li>
       <li>
-        <span className='font-bold'>Donors:</span> {project?.stats?.donationCount}
+        <span className="font-bold">Donors:</span> {project?.stats?.donationCount}
       </li>
       <li>
-        <span className='font-bold'>Contract Balance:</span> {formatCurrency(balanceValue)}
+        <span className="font-bold">Contract Balance:</span> {formatCurrency(balanceValue)}
       </li>
     </ul>
   );

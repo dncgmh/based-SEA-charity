@@ -29,7 +29,12 @@ projectRouter.get('/', async ({ query: { pageSize, pageNumber, charityId, status
       query.endDate = { $lt: new Date() };
     }
   }
-  const projects = await projectModel.find(query).skip(skipValue).sort('-createdAt').limit(Number(pageSize)).populate('charity', 'name logo');
+  const projects = await projectModel
+    .find(query)
+    .skip(skipValue)
+    .sort('-createdAt')
+    .limit(Number(pageSize))
+    .populate('charity', 'name logo');
   const total = await projectModel.countDocuments(query);
   await Promise.all(
     projects.map(async (project) => {
@@ -46,7 +51,9 @@ projectRouter.get('/', async ({ query: { pageSize, pageNumber, charityId, status
 projectRouter.get('/featured', async () => {
   const featuredProjects = await projectService.getFeaturedProjects();
   const isLessThanDisplayLimit = featuredProjects.length < config.app.display.featureProjects;
-  const projects = await projectModel.find({ _id: { $in: featuredProjects.map((project) => project._id) } }).populate('charity', 'name logo');
+  const projects = await projectModel
+    .find({ _id: { $in: featuredProjects.map((project) => project._id) } })
+    .populate('charity', 'name logo');
   if (isLessThanDisplayLimit) {
     const remainingProjects = await projectModel
       .find({

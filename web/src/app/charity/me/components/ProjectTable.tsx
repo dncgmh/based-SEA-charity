@@ -44,40 +44,46 @@ const ProjectsTable = () => {
 
   return (
     <div>
-      <div className='mb-4 flex items-center justify-between'>
-        <h3 className='font-bold text-2xl'>Projects</h3>
-        <button className='btn btn-info' onClick={() => showModal('create-project')}>
-          <Plus className='mr-2 h-4 w-4' /> Create New Project
+      <div className="mb-4 flex items-center justify-between">
+        <h3 className="font-bold text-2xl">Projects</h3>
+        <button className="btn btn-info" onClick={() => showModal('create-project')}>
+          <Plus className="mr-2 h-4 w-4" /> Create New Project
         </button>
       </div>
 
-      <div className='overflow-x-auto'>
-        <table className='table-zebra table w-full'>
+      <div className="overflow-x-auto">
+        <table className="table-zebra table w-full">
           <thead>
             <tr>
-              <th className='w-1/12'>Image</th>
-              <th className='w-1/6'>Title</th>
+              <th className="w-1/12">Image</th>
+              <th className="w-1/6">Title</th>
               <th>Contract Address</th>
               <th>Date Range</th>
               <th>Details</th>
-              <th className='w-1/6'>Actions</th>
+              <th className="w-1/6">Actions</th>
             </tr>
           </thead>
           <tbody>
             {projects.map((project) => (
               <tr key={project._id}>
                 <td>
-                  <Image src={project.images[0]} alt={project.title} width={100} height={75} className='rounded object-cover' />
+                  <Image
+                    src={project.images[0]}
+                    alt={project.title}
+                    width={100}
+                    height={75}
+                    className="rounded object-cover"
+                  />
                 </td>
                 <td>
-                  <Link className='link' href={`/project/${project.slug}`}>
+                  <Link className="link" href={`/project/${project.slug}`}>
                     {project.title}
                   </Link>
                 </td>
-                <td className='font-mono'>
+                <td className="font-mono">
                   {project.contractAddress && (
-                    <Link href={`${explorerUrl}/address/${project.contractAddress}`} target='_blank'>
-                      <button className='btn btn-outline btn-xs'>
+                    <Link href={`${explorerUrl}/address/${project.contractAddress}`} target="_blank">
+                      <button className="btn btn-outline btn-xs">
                         <ReceiptText size={12} />
                         {shortenAddress(project.contractAddress)}
                       </button>
@@ -91,31 +97,34 @@ const ProjectsTable = () => {
                 <td>
                   <ProjectTableStats project={project} />
                 </td>
-                <td className='space-y-2'>
+                <td className="space-y-2">
                   <button
-                    className='btn btn-outline btn-sm w-full'
+                    className="btn btn-outline btn-sm w-full"
                     onClick={() => {
                       setEditingProject(project);
                       showModal('update-project');
-                    }}>
+                    }}
+                  >
                     <Edit size={12} /> Edit
                   </button>
                   <button
-                    className='btn btn-outline btn-sm w-full'
+                    className="btn btn-outline btn-sm w-full"
                     disabled={project.contractAddress}
                     onClick={() => {
                       setEditingProject(project);
                       showModal('open-donations');
-                    }}>
+                    }}
+                  >
                     <LifeBuoy size={12} /> Open Donations
                   </button>
                   <button
-                    className='btn btn-outline btn-sm w-full'
+                    className="btn btn-outline btn-sm w-full"
                     onClick={() => {
                       setEditingProject(project);
                       showModal('withdraw-modal');
                     }}
-                    disabled={project.currentBalance <= 0}>
+                    disabled={project.currentBalance <= 0}
+                  >
                     <ArrowDownToLine size={12} /> Withdraw
                   </button>
                 </td>

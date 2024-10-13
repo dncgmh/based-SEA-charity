@@ -47,7 +47,6 @@ export default function ProjectsPage() {
   return (
     <div className="min-h-screen bg-gray-100">
       <div className="container mx-auto px-4 py-4">
-
         <div className="tabs tabs-boxed mb-6 justify-center">
           <button
             className={`tab ${activeTab === 'ongoing' ? 'tab-active' : ''}`}
@@ -71,7 +70,9 @@ export default function ProjectsPage() {
 
         {loading && <Loading />}
 
-        {!loading && projects.length === 0 && <p className="mt-8 text-center text-lg text-slate-500">No projects to display.</p>}
+        {!loading && projects.length === 0 && (
+          <p className="mt-8 text-center text-lg text-slate-500">No projects to display.</p>
+        )}
 
         {totalItems > pageSize && (
           <div className="mt-8 flex justify-center">

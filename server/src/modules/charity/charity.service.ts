@@ -1,4 +1,3 @@
-import mongoose from 'mongoose';
 import { transactionModel } from '../transaction/transaction.model';
 
 async function getFeaturedCharities() {

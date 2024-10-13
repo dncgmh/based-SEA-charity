@@ -18,7 +18,10 @@ export const explorerTxUrl = (tx) => {
   return `${baseSepolia.blockExplorers.default.url}/tx/${tx}`;
 };
 
-export const formatCurrency = (value: number, options: { fractionDigits?: number; prefix?: string; hideSymbol?: boolean } = {}) => {
+export const formatCurrency = (
+  value: number,
+  options: { fractionDigits?: number; prefix?: string; hideSymbol?: boolean } = {},
+) => {
   value = value || 0;
   let returnValue = new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -39,6 +42,6 @@ export const getRemainingDate = (date) => {
   return dayjs(date).fromNow();
 };
 
-export const formatDate = date => {
+export const formatDate = (date) => {
   return dayjs(date).format('YYYY-MM-DD');
-}
+};

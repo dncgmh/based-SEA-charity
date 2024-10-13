@@ -78,71 +78,104 @@ export default function UpdateCharityModal({ charity, onUpdate }) {
   };
 
   return (
-    <dialog id='update-charity' className='modal'>
-      <div className='modal-box'>
-        <h3 className='mb-4 font-bold text-lg'>Edit Charity Details</h3>
+    <dialog id="update-charity" className="modal">
+      <div className="modal-box">
+        <h3 className="mb-4 font-bold text-lg">Edit Charity Details</h3>
         <form onSubmit={handleSubmit}>
-          <div className='form-control'>
-            <label className='label' htmlFor='name'>
-              <span className='label-text'>Charity Name</span>
+          <div className="form-control">
+            <label className="label" htmlFor="name">
+              <span className="label-text">Charity Name</span>
             </label>
-            <input type='text' id='name' name='name' value={formData.name} onChange={handleChange} className='input input-bordered w-full' />
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              className="input input-bordered w-full"
+            />
           </div>
-          <div className='form-control'>
-            <label className='label' htmlFor='description'>
-              <span className='label-text'>Description</span>
+          <div className="form-control">
+            <label className="label" htmlFor="description">
+              <span className="label-text">Description</span>
             </label>
             <textarea
               rows={5}
-              id='description'
-              name='description'
+              id="description"
+              name="description"
               value={formData.description}
               onChange={handleChange}
               defaultValue={charity.description}
-              className='textarea textarea-bordered w-full'
+              className="textarea textarea-bordered w-full"
             />
           </div>
-          <div className='form-control'>
-            <label className='label' htmlFor='address'>
-              <span className='label-text'>Address</span>
+          <div className="form-control">
+            <label className="label" htmlFor="address">
+              <span className="label-text">Address</span>
             </label>
-            <input type='text' id='address' name='address' value={formData.address} onChange={handleChange} defaultValue={charity.address} className='input input-bordered w-full' />
+            <input
+              type="text"
+              id="address"
+              name="address"
+              value={formData.address}
+              onChange={handleChange}
+              defaultValue={charity.address}
+              className="input input-bordered w-full"
+            />
           </div>
-          <div className='form-control'>
-            <label className='label' htmlFor='phoneNumber'>
-              <span className='label-text'>Phone Number</span>
+          <div className="form-control">
+            <label className="label" htmlFor="phoneNumber">
+              <span className="label-text">Phone Number</span>
             </label>
-            <input type='text' id='phoneNumber' name='phoneNumber' value={formData.phoneNumber} onChange={handleChange} defaultValue={charity.phoneNumber} className='input input-bordered w-full' />
+            <input
+              type="text"
+              id="phoneNumber"
+              name="phoneNumber"
+              value={formData.phoneNumber}
+              onChange={handleChange}
+              defaultValue={charity.phoneNumber}
+              className="input input-bordered w-full"
+            />
           </div>
-          <div className='form-control w-full'>
-            <div className='label'>
-              <span className='label-text'>Links</span>
+          <div className="form-control w-full">
+            <div className="label">
+              <span className="label-text">Links</span>
             </div>
             {formData.links.map((link, index) => (
-              <div key={index} className='mb-2 flex gap-2'>
-                <select value={link.type} onChange={(e) => handleLinkChange(index, 'type', e.target.value)} className='select select-bordered w-1/3'>
-                  <option value=''>Select Type</option>
+              <div key={index} className="mb-2 flex gap-2">
+                <select
+                  value={link.type}
+                  onChange={(e) => handleLinkChange(index, 'type', e.target.value)}
+                  className="select select-bordered w-1/3"
+                >
+                  <option value="">Select Type</option>
                   {linkTypes.map((type) => (
                     <option key={type} value={type}>
                       {type}
                     </option>
                   ))}
                 </select>
-                <input type='url' value={link.url} onChange={(e) => handleLinkChange(index, 'url', e.target.value)} placeholder='URL' className='input input-bordered w-2/3' />
-                <button type='button' onClick={() => removeLink(index)} className='btn btn-square btn-sm'>
+                <input
+                  type="url"
+                  value={link.url}
+                  onChange={(e) => handleLinkChange(index, 'url', e.target.value)}
+                  placeholder="URL"
+                  className="input input-bordered w-2/3"
+                />
+                <button type="button" onClick={() => removeLink(index)} className="btn btn-square btn-sm">
                   <X size={20} />
                 </button>
               </div>
             ))}
-            <button type='button' onClick={addLink} className='btn btn-outline btn-sm'>
+            <button type="button" onClick={addLink} className="btn btn-outline btn-sm">
               <PlusCircle size={20} /> Add Link
             </button>
           </div>
-          <div className='modal-action'>
-            <button type='submit' className='btn btn-info'>
+          <div className="modal-action">
+            <button type="submit" className="btn btn-info">
               Update Charity
             </button>
-            <button type='button' className='btn' onClick={onClose}>
+            <button type="button" className="btn" onClick={onClose}>
               Cancel
             </button>
           </div>

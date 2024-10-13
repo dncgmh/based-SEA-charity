@@ -10,7 +10,7 @@ import { useSetting } from '@/hooks/use-setting';
 
 export default function ProjectList({ projectId = null }) {
   const [transactions, setTransactions] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [_loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('donate');
   const [currentPage, setCurrentPage] = useState(1);
@@ -51,17 +51,17 @@ export default function ProjectList({ projectId = null }) {
       return <button className={`join-item btn ${current === currentPage ? 'btn-active' : ''}`}>{current}</button>;
     }
     if (type === 'prev') {
-      return <button className='join-item btn'>«</button>;
+      return <button className="join-item btn">«</button>;
     }
     if (type === 'next') {
-      return <button className='join-item btn'>»</button>;
+      return <button className="join-item btn">»</button>;
     }
     return element;
   };
 
   const TransactionTable = () => (
-    <div className='overflow-x-auto'>
-      <table className='table-zebra table w-full'>
+    <div className="overflow-x-auto">
+      <table className="table-zebra table w-full">
         <thead>
           <tr>
             <th>Date</th>
@@ -76,15 +76,18 @@ export default function ProjectList({ projectId = null }) {
             <tr key={transaction._id}>
               <td>{format(new Date(transaction.createdAt), 'PPpp')}</td>
               <td>
-                <div className='tooltip' data-tip={formatCurrency(transaction.amount * setting.etherPrice, { fractionDigits: 6 })}>
+                <div
+                  className="tooltip"
+                  data-tip={formatCurrency(transaction.amount * setting.etherPrice, { fractionDigits: 6 })}
+                >
                   {formatCurrency(transaction.amount * setting.etherPrice)}
                 </div>
               </td>
               <td>{shortenAddress(transaction.from)}</td>
-              <td className='max-w-xs truncate'>{transaction.message}</td>
+              <td className="max-w-xs truncate">{transaction.message}</td>
               <td>
-                <Link href={explorerTxUrl(transaction.txHash)} target='_blank'>
-                  <button className='btn btn-info btn-xs'>View Details</button>
+                <Link href={explorerTxUrl(transaction.txHash)} target="_blank">
+                  <button className="btn btn-info btn-xs">View Details</button>
                 </Link>
               </td>
             </tr>
@@ -95,28 +98,45 @@ export default function ProjectList({ projectId = null }) {
   );
 
   if (error) {
-    return <div className='alert alert-error'>{error}</div>;
+    return <div className="alert alert-error">{error}</div>;
   }
 
   return (
-    <div className='container mx-auto px-4 py-4'>
-      <h1 className='mb-6 font-bold text-3xl'>Transaction History</h1>
+    <div className="container mx-auto px-4 py-4">
+      <h1 className="mb-6 font-bold text-3xl">Transaction History</h1>
 
-      <div className='tabs tabs-boxed mb-6 justify-center'>
-        <button className={`tab ${activeTab === 'donate' ? 'tab-active' : ''}`} onClick={() => handleTabChange('donate')}>
+      <div className="tabs tabs-boxed mb-6 justify-center">
+        <button
+          className={`tab ${activeTab === 'donate' ? 'tab-active' : ''}`}
+          onClick={() => handleTabChange('donate')}
+        >
           Donations
         </button>
-        <button className={`tab ${activeTab === 'withdraw' ? 'tab-active' : ''}`} onClick={() => handleTabChange('withdraw')}>
+        <button
+          className={`tab ${activeTab === 'withdraw' ? 'tab-active' : ''}`}
+          onClick={() => handleTabChange('withdraw')}
+        >
           Withdrawals
         </button>
       </div>
 
-      {transactions.length > 0 ? <TransactionTable /> : <p className='text-center text-gray-500'>No transactions found.</p>}
+      {transactions.length > 0 ? (
+        <TransactionTable />
+      ) : (
+        <p className="text-center text-gray-500">No transactions found.</p>
+      )}
 
       {totalItems > pageSize && (
-        <div className='mt-8 flex justify-center'>
-          <div className='mt-6 flex justify-center'>
-            <Pagination current={currentPage} total={totalItems} pageSize={pageSize} onChange={setCurrentPage} className='join' itemRender={itemRender} />
+        <div className="mt-8 flex justify-center">
+          <div className="mt-6 flex justify-center">
+            <Pagination
+              current={currentPage}
+              total={totalItems}
+              pageSize={pageSize}
+              onChange={setCurrentPage}
+              className="join"
+              itemRender={itemRender}
+            />
           </div>
         </div>
       )}

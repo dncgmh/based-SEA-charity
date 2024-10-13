@@ -16,20 +16,21 @@ export default function Footer() {
       <div>
         <p className="font-bold text-2xl">Based SEA Charity</p>
         <p>Empowering global giving since 2024</p>
+        <p>Powered by Base</p>
       </div>
       <div>
         <div className="grid grid-flow-col gap-4">
-          <a href="#/" className="link link-hover">
-            About us
+          <a href="https://www.base.org/names" target="_blank" className="link link-hover" rel="noreferrer">
+            Onchain Identity
           </a>
-          <a href="#/" className="link link-hover">
-            Phone Number
+          <a href="https://keys.coinbase.com/" target="_blank" rel="noreferrer" className="link link-hover">
+            Smart Wallet
           </a>
-          <a href="#/" className="link link-hover">
-            Jobs
+          <a href="https://wallet.coinbase.com/" target="_blank" rel="noreferrer" className="link link-hover">
+            Coinbase Wallet
           </a>
-          <a href="#/" className="link link-hover">
-            Press kit
+          <a href="https://basescan.org/" target="_blank" rel="noreferrer" className="link link-hover">
+            Base Explorer
           </a>
         </div>
       </div>
