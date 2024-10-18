@@ -7,7 +7,7 @@ import { config } from '../config';
 
 const publicClient = createPublicClient({
   chain: baseSepolia,
-  transport: webSocket(config.provider.webSoket),
+  transport: webSocket(config.provider.webSocket),
 });
 
 export const subscribe = () => {

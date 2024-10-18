@@ -1,14 +1,16 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { CircleCheck, CircleX, Info } from 'lucide-react';
+import { BookHeart, CircleCheck, CircleX, Info } from 'lucide-react';
 import Link from 'next/link';
 import { type Hex, parseEther } from 'viem';
-import { type BaseError, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
+import { type BaseError, useReadContract, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 import contractJson from '@/contract-abis/CharityProjectDonation.json';
 import { useAtom } from 'jotai';
 import transactionRefreshAtom from '@/stores/transaction-refresh';
-import { explorerTxUrl, shortenAddress } from '@/lib/common';
+import { explorerAddressUrl, explorerTxUrl, shortenAddress } from '@/lib/common';
+import { getName } from '@coinbase/onchainkit/identity';
+import { base } from 'wagmi/chains';
 
 interface FormData {
   value: string;
@@ -22,6 +24,18 @@ export default function DonateCollapse({ project }) {
 
   const { data: hash, error, isPending, writeContract } = useWriteContract();
   const isEnded = new Date(project.endDate) < new Date();
+
+  const { data: ownerAddress } = useReadContract({
+    abi: contractJson.abi as any,
+    address: project.contractAddress as Hex,
+    functionName: 'owner',
+  });
+  const [basename, setBasename] = useState('');
+  useEffect(() => {
+    if (ownerAddress) {
+      getName({ address: ownerAddress, chain: base }).then((name) => setBasename(name));
+    }
+  }, [ownerAddress]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -64,13 +78,14 @@ export default function DonateCollapse({ project }) {
       )}
       <div className="collapse-content">
         <form onSubmit={handleSubmit} className="flex flex-col justify-center">
-          <input
-            readOnly={true}
-            className="input input-bordered input-sm mt-2 w-full cursor-pointer"
-            value={project.contractAddress}
-            placeholder="Address"
-            required={true}
-          />
+          <a
+            href={explorerAddressUrl(project.contractAddress)}
+            target="_blank"
+            rel="noreferrer"
+            className="btn btn-outline btn-sm mt-2">
+            <BookHeart size={18}/>
+            {`${basename} - ${project.contractAddress.slice(-4)}`}
+          </a>
           <input
             name="value"
             className="input input-bordered input-sm mt-2 w-full"

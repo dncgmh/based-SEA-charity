@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
-import { format } from 'date-fns';
 import { api } from '@/lib/api';
-import { explorerTxUrl, formatCurrency, shortenAddress } from '@/lib/common';
 import Pagination from 'rc-pagination';
 import { useAtom } from 'jotai';
 import transactionRefreshAtom from '@/stores/transaction-refresh';
-import Link from 'next/link';
 import { useSetting } from '@/hooks/use-setting';
+import TransactionRow from '@/app/project/[slug]/components/TransactionRow';
+import Loading from '@/components/Loading';
 
 export default function ProjectList({ projectId = null }) {
   const [transactions, setTransactions] = useState([]);
@@ -20,6 +19,7 @@ export default function ProjectList({ projectId = null }) {
   const pageSize = 10;
 
   useEffect(() => {
+    setTransactions([]);
     fetchTransactions();
   }, [activeTab, currentPage, projectId]);
 
@@ -73,27 +73,19 @@ export default function ProjectList({ projectId = null }) {
         </thead>
         <tbody>
           {transactions.map((transaction) => (
-            <tr key={transaction._id}>
-              <td>{format(new Date(transaction.createdAt), 'PPpp')}</td>
-              <td>
-                <div
-                  className="tooltip"
-                  data-tip={formatCurrency(transaction.amount * setting.etherPrice, { fractionDigits: 6 })}
-                >
-                  {formatCurrency(transaction.amount * setting.etherPrice)}
-                </div>
-              </td>
-              <td>{shortenAddress(transaction.from)}</td>
-              <td className="max-w-xs truncate">{transaction.message}</td>
-              <td>
-                <Link href={explorerTxUrl(transaction.txHash)} target="_blank">
-                  <button className="btn btn-info btn-xs">View Details</button>
-                </Link>
-              </td>
-            </tr>
+            <TransactionRow key={transaction._id} transaction={transaction} setting={setting} />
           ))}
         </tbody>
       </table>
+      {_loading ? (
+        <Loading />
+      ) : transactions.length ? (
+        <></>
+      ) : (
+        <div className="w-full py-4">
+          <p className="text-center text-slate-600 text-sm">No transactions found.</p>
+        </div>
+      )}
     </div>
   );
 
@@ -104,27 +96,20 @@ export default function ProjectList({ projectId = null }) {
   return (
     <div className="container mx-auto px-4 py-4">
       <h1 className="mb-6 font-bold text-3xl">Transaction History</h1>
-
       <div className="tabs tabs-boxed mb-6 justify-center">
         <button
           className={`tab ${activeTab === 'donate' ? 'tab-active' : ''}`}
-          onClick={() => handleTabChange('donate')}
-        >
+          onClick={() => handleTabChange('donate')}>
           Donations
         </button>
         <button
           className={`tab ${activeTab === 'withdraw' ? 'tab-active' : ''}`}
-          onClick={() => handleTabChange('withdraw')}
-        >
+          onClick={() => handleTabChange('withdraw')}>
           Withdrawals
         </button>
       </div>
 
-      {transactions.length > 0 ? (
-        <TransactionTable />
-      ) : (
-        <p className="text-center text-gray-500">No transactions found.</p>
-      )}
+      <TransactionTable />
 
       {totalItems > pageSize && (
         <div className="mt-8 flex justify-center">

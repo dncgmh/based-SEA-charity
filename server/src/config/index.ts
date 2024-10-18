@@ -20,7 +20,7 @@ export const config = {
     apiSecret: process.env.CLOUDINARY_API_SECRET,
   },
   provider: {
-    webSoket: process.env.WEBSOCKET_PROVIDER,
+    webSocket: process.env.WEBSOCKET_PROVIDER,
   },
   basescan: {
     url: process.env.BASESCAN_URL,
