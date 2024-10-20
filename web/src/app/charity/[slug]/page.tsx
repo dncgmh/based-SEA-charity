@@ -7,6 +7,9 @@ import ProjectCard from '@/components/ProjectCard';
 import { useEffect, useState } from 'react';
 import Loading from '@/components/Loading';
 import { useSetting } from '@/hooks/use-setting';
+import { useName } from '@coinbase/onchainkit/identity';
+import { base } from 'wagmi/chains';
+import { explorerAddressUrl, formatCurrency, shortenAddress } from '@/lib/common';
 
 const QuickStats = ({ charity }) => {
   const { setting } = useSetting();
@@ -21,7 +24,7 @@ const QuickStats = ({ charity }) => {
         <div className="badge badge-outline badge-lg flex items-center gap-2 text-xs">
           <Coins size={16} />
           <span className="font-semibold">Raised:</span>
-          <span>${totalFundsRaised}</span>
+          <span>${formatCurrency(totalFundsRaised)}</span>
         </div>
         <div className="badge badge-outline badge-lg mt-2 flex items-center gap-2 text-xs">
           <User size={16} />
@@ -36,6 +39,8 @@ const QuickStats = ({ charity }) => {
 export default async function CharityDetailPage({ params }: { params: { slug: string } }) {
   const [charity, setCharity] = useState(null);
   const [projects, setProjects] = useState([]);
+
+  const basename = useName({ address: charity?.onchainAddress, chain: base });
 
   useEffect(() => {
     (async () => {
@@ -81,7 +86,15 @@ export default async function CharityDetailPage({ params }: { params: { slug: st
               </div>
               <div>
                 <h1 className="font-bold text-3xl">{charity.name}</h1>
-                <p className="text-base-content/70">{charity.type}</p>
+                <p className="text-base-content/70">
+                  <a
+                    className="link link-info link-hover text-gray-600 text-sm"
+                    href={explorerAddressUrl(charity.onchainAddress)}
+                    target="_blank"
+                    rel="noreferrer">
+                    {basename.data ? `@${basename.data}` : shortenAddress(charity.onchainAddress)}
+                  </a>
+                </p>
               </div>
             </div>
           </div>
@@ -117,8 +130,7 @@ export default async function CharityDetailPage({ params }: { params: { slug: st
                     href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn btn-outline btn-sm"
-                  >
+                    className="btn btn-outline btn-sm">
                     {getLinkIcon(link.type)}
                     <span className="ml-2">{link.type}</span>
                   </a>

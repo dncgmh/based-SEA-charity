@@ -9,13 +9,20 @@ import TransactionList from '@/app/project/[slug]/components/TransactionList';
 import { useBalance } from 'wagmi';
 import Loading from '@/components/Loading';
 import { useSetting } from '@/hooks/use-setting';
-import { formatCurrency } from '@/lib/common';
+import { explorerAddressUrl, formatCurrency, shortenAddress } from '@/lib/common';
+import { useName } from '@coinbase/onchainkit/identity';
+import { base } from 'wagmi/chains';
 
 export default function ProjectDetailPage({ params }) {
   const [project, setProject] = useState(null);
   const [charity, setCharity] = useState(null);
   const [loading, setLoading] = useState(true);
   const { setting } = useSetting();
+
+  const basename = useName({
+    address: charity?.onchainAddress,
+    chain: base,
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -87,7 +94,13 @@ export default function ProjectDetailPage({ params }) {
                 </div>
                 <div>
                   <h2 className="card-title">{charity.name}</h2>
-                  <p className="text-gray-600 text-sm">Project Organizer</p>
+                  <a
+                    className="link link-info link-hover text-gray-600 text-sm"
+                    href={explorerAddressUrl(charity.onchainAddress)}
+                    target="_blank"
+                    rel="noreferrer">
+                    {basename.data ? `@${basename.data}` : shortenAddress(charity.onchainAddress)}
+                  </a>
                 </div>
               </div>
 
@@ -149,8 +162,7 @@ export default function ProjectDetailPage({ params }) {
         {project.tags.map((tag, index) => (
           <div
             key={index}
-            className="badge badge-outline cursor-pointer p-3 transition-all duration-300 hover:bg-info hover:text-white"
-          >
+            className="badge badge-outline cursor-pointer p-3 transition-all duration-300 hover:bg-info hover:text-white">
             <Tag size={14} className="mr-2" />
             {tag}
           </div>

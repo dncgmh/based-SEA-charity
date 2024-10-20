@@ -3,15 +3,19 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useSetting } from '@/hooks/use-setting';
-import { getRemainingDate } from '@/lib/common';
+import { explorerAddressUrl, formatCurrency, getRemainingDate, shortenAddress } from '@/lib/common';
+import { useName } from '@coinbase/onchainkit/identity';
+import { base } from 'wagmi/chains';
 
 export default function ProjectCard({ project }) {
   const { setting } = useSetting();
   const totalFundsRaised = project.stats?.totalDonated;
   const targetAmount = project.targetAmount;
-
+  const basename = useName({
+    address: project.charity.onchainAddress,
+    chain: base,
+  });
   const totalFundsRaisedValue = totalFundsRaised * setting.etherPrice;
-
   const progressPercentage = (totalFundsRaisedValue / project.targetAmount) * 100;
   const remainingFunds = targetAmount - totalFundsRaisedValue;
 
@@ -31,7 +35,16 @@ export default function ProjectCard({ project }) {
               />
             </div>
           </div>
-          <span className="font-semibold text-sm">{project.charity.name}</span>
+          <div className="flex flex-col">
+            <span className="font-semibold text-sm">{project.charity.name}</span>
+            <a
+              className="link link-info link-hover text-gray-600 text-sm"
+              href={explorerAddressUrl(project.charity.onchainAddress)}
+              target="_blank"
+              rel="noreferrer">
+              {basename.data ? `@${basename.data}` : shortenAddress(project.charity.onchainAddress)}
+            </a>
+          </div>
         </div>
         <div className="absolute top-2 right-2 rounded-full bg-info px-2 py-1 font-bold text-info-content text-xs">
           {getRemainingDate(project.endDate)}
@@ -44,7 +57,7 @@ export default function ProjectCard({ project }) {
         <progress className="progress progress-info w-full" value={progressPercentage} max="100" />
         <div className="flex justify-between text-sm">
           <span>{progressPercentage.toFixed(1)}% funded</span>
-          <span>${remainingFunds.toLocaleString()} to go</span>
+          <span>{formatCurrency(remainingFunds)} to go</span>
         </div>
         <div className="mt-2 flex items-center justify-between">
           <span className="font-semibold text-sm">{project.stats?.donationCount} donors</span>
