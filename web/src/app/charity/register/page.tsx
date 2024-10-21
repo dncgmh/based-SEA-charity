@@ -7,11 +7,14 @@ import { api } from '@/lib/api';
 import { useAccount, useSignMessage } from 'wagmi';
 import { useAuth } from '@/hooks/use-auth';
 import { navigate } from '@/app/actions';
+import { getName } from '@coinbase/onchainkit/identity';
+import { base } from 'wagmi/chains';
 
 const linkTypes = ['website', 'facebook', 'instagram', 'tiktok', 'youtube'];
 
 export default function CharityRegisterPage() {
   const { address } = useAccount();
+  const [basename, setBasename] = useState('');
   const { data: signMessageData, signMessage, variables } = useSignMessage();
   const { login } = useAuth();
 
@@ -32,6 +35,7 @@ export default function CharityRegisterPage() {
 
   useEffect(() => {
     if (address) {
+      getName({ address: address, chain: base }).then((basename) => setBasename(basename));
       setFormData((prevData) => ({
         ...prevData,
         onchainAddress: address,
@@ -212,6 +216,9 @@ export default function CharityRegisterPage() {
                     className="input input-bordered w-full"
                     required={true}
                   />
+                  <div className="label">
+                    <span className="label-text-alt text-sky-600">{basename}</span>
+                  </div>
                 </label>
 
                 <label className="form-control w-full">
@@ -253,8 +260,7 @@ export default function CharityRegisterPage() {
                     value={formData.type}
                     onChange={handleInputChange}
                     className="select select-bordered w-full"
-                    required={true}
-                  >
+                    required={true}>
                     <option value="" disabled={true}>
                       Select your charity type
                     </option>
@@ -272,8 +278,7 @@ export default function CharityRegisterPage() {
                       <select
                         value={link.type}
                         onChange={(e) => handleLinkChange(index, 'type', e.target.value)}
-                        className="select select-bordered w-1/3"
-                      >
+                        className="select select-bordered w-1/3">
                         <option value="">Select Type</option>
                         {linkTypes.map((type) => (
                           <option key={type} value={type}>

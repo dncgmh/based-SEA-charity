@@ -3,13 +3,15 @@ import { toast } from 'sonner';
 import { CircleCheck, CircleX, Info } from 'lucide-react';
 import Link from 'next/link';
 import { parseEther } from 'viem';
-import { type BaseError, useAccount, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
+import { type BaseError, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 import contractJson from '@/contract-abis/CharityProjectDonation.json';
+import { getName } from '@coinbase/onchainkit/identity';
+import { base } from 'wagmi/chains';
 
 export default function WithdrawModal({ project }) {
-  const { address } = useAccount();
+  const [basename, setBasename] = useState('');
   const [formData, setFormData] = useState({
-    address: project?.contractAddress || '',
+    address: '',
     value: '',
     message: '',
   });
@@ -18,10 +20,15 @@ export default function WithdrawModal({ project }) {
     if (project) {
       setFormData((prev) => ({
         ...prev,
-        address: project.contractAddress,
       }));
     }
   }, [project]);
+
+  useEffect(() => {
+    if (formData.address.length === 42) {
+      getName({ address: formData.address, chain: base }).then((basename) => setBasename(basename));
+    }
+  }, [formData.address]);
 
   const { data: hash, error, isPending, writeContract } = useWriteContract();
 
@@ -72,6 +79,9 @@ export default function WithdrawModal({ project }) {
               className="input input-bordered w-full"
               required={true}
             />
+            <div className="label">
+              <span className="label-text-alt text-sky-600">{basename}</span>
+            </div>
           </div>
           <div className="form-control">
             <label className="label" htmlFor="value">

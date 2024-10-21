@@ -1,12 +1,21 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { api } from 'src/lib/api';
 
-export default async function FeaturedCharities() {
-  const { data: charities = [] } = await api.charity.getFeatured();
-  if (charities.length < 6) {
-    charities.splice(3, 3);
-  }
+export default function FeaturedCharities() {
+  const [charities, setCharities] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data: fetchedCharities } = await api.charity.getFeatured();
+      setCharities(fetchedCharities.slice(0, 3));
+    };
+    fetchData();
+  }, []);
+
   return (
     <div className="bg-sky-50">
       <div className="container">
@@ -18,7 +27,7 @@ export default async function FeaturedCharities() {
             </Link>
           </div>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {charities?.slice(0, 6).map((charity, index) => (
+            {charities.map((charity, index) => (
               <div key={index} className="card bg-base-200 shadow-xl">
                 <figure className="px-2 py-4">
                   <div className="avatar">

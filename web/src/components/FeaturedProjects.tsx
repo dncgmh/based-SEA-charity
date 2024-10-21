@@ -1,12 +1,23 @@
+'use client';
+
 import ProjectCard from '@/components/ProjectCard';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { api } from 'src/lib/api';
 
-export default async function FeaturedProjects() {
-  const { data: projects = [] } = await api.project.getFeatured();
-  if (projects.length < 6) {
-    projects.splice(3, 3);
-  }
+export default function FeaturedProjects() {
+  const [projects, setProjects] = useState([]);
+  useEffect(() => {
+    const fetchProjects = async () => {
+      const { data: fetchedProjects } = await api.project.getFeatured();
+      if (fetchedProjects.length < 6) {
+        fetchedProjects.splice(3, 3);
+      }
+      setProjects(fetchedProjects);
+    };
+    fetchProjects();
+  }, []);
+
   return (
     <div className="bg-blue-50">
       <div className="container">
